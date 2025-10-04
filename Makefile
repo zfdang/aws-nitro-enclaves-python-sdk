@@ -12,6 +12,7 @@ dev: | $(VENV)
 $(VENV):
 	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
+	$(PIP) install maturin
 
 build-wheel: | $(VENV)
 	export PATH="$$HOME/.cargo/bin:$$PATH" && $(MATURIN) build --release -o target/wheels
