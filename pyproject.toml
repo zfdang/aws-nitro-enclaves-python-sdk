@@ -1,0 +1,66 @@
+[build-system]
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "aws-nitro-enclaves-python-sdk"
+version = "0.1.0"
+description = "Python SDK for AWS Nitro Enclaves NSM"
+authors = [{ name = "AWS Nitro Enclaves SDK Team", email = "nitro-enclaves@example.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Rust",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Topic :: Security :: Cryptography",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+  "typing-extensions>=4.7,<5.0"
+]
+
+dynamic = ["keywords"]
+
+[project.optional-dependencies]
+verifier = [
+  "cryptography>=41,<43",
+  "cbor2>=5,<6"
+]
+dev = [
+  "pytest>=7.4,<8.3",
+  "mypy>=1.6,<1.11",
+  "ruff>=0.1.5,<0.6.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/aws-nitro-enclaves-python-sdk"
+Documentation = "https://github.com/your-org/aws-nitro-enclaves-python-sdk/tree/main/docs"
+"Source Code" = "https://github.com/your-org/aws-nitro-enclaves-python-sdk"
+"Issue Tracker" = "https://github.com/your-org/aws-nitro-enclaves-python-sdk/issues"
+
+[tool.maturin]
+bindings = "pyo3"
+module-name = "aws_nitro_enclaves.nsm._rust"
+features = ["pyo3/extension-module"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+extend-select = ["I"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_unused_configs = true
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true

@@ -1,0 +1,92 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+wheelhouse/
+
+# Editable install state
+*.egg-link
+
+# Maturin / Rust / target
+target/
+**/target/
+Cargo.lock
+
+# Maturin intermediate
+.maturin/
+
+# pytest
+.pytest_cache/
+.cache/
+
+# virtualenv
+venv/
+.env
+.env.*
+.venv/
+
+# mypy
+.mypy_cache/
+
+# ruff
+.cache/
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+
+# Sphinx
+docs/_build/
+
+# Editors
+.vscode/
+.idea/
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SSH
+ssh_config
+
+# Local secrets
+.envrc
+secrets/
+
+# Logs
+*.log
+
+# Temporary files
+*.swp
+*~
+
+# PyInstaller
+*.manifest
+*.spec
+
+# pyproject editable build
+__pypackages__/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.bak
+*.tmp
+
+# Ensure README, license, and other metadata tracked explicitly
+!README.md
+!LICENSE

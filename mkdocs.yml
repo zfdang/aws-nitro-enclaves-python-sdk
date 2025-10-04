@@ -1,0 +1,10 @@
+site_name: AWS Nitro Enclaves Python SDK
+site_description: Documentation for the AWS Nitro Enclaves Python SDK
+site_url: https://your-org.github.io/aws-nitro-enclaves-python-sdk/
+repo_url: https://github.com/your-org/aws-nitro-enclaves-python-sdk
+nav:
+  - Home: index.md
+  - Usage: usage.md
+docs_dir: docs
+theme:
+  name: material
