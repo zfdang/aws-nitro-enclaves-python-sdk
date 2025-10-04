@@ -64,3 +64,26 @@ CI hints
   - consider caching pip and cargo registry to speed runs.
 
 If you want, I can add a `pre-commit` configuration and a GitHub Action to run `pre-commit` on PRs.
+
+Addendum: Rust toolchain and matrix wheel builds
+-----------------------------------------------
+
+The Makefile includes two helpful targets:
+
+- `make install-rust` — checks whether `rustc` is available and, if not, installs `rustup` non-interactively. After running this target, source your cargo env with:
+
+```bash
+source $HOME/.cargo/env
+```
+
+- `make build-wheels-matrix` — attempts to build wheels for multiple Python interpreters (python3.8..python3.11). It will skip interpreters that are not present on the machine. Usage:
+
+```bash
+# ensure rust is installed and cargo in PATH
+make install-rust
+source $HOME/.cargo/env
+make build-wheels-matrix
+# wheels will be placed in target/wheels/
+```
+
+These targets are handy for preparing multiple ABI wheels on a machine that has multiple Python interpreters installed (e.g., build worker). For CI reproducibility, consider running builds inside a controlled environment (manylinux docker image) or building on GitHub Actions runners.
