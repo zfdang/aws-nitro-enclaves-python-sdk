@@ -9,6 +9,8 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
 
+mod device;
+
 const DEFAULT_DEVICE_PATH: &str = "/var/run/nsm";
 const PCR_SLOTS: usize = 32;
 const PCR_DIGEST_LEN: usize = 32;
@@ -343,6 +345,9 @@ fn _rust(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<NsmSession>()?;
     m.add_function(wrap_pyfunction!(sdk_version, m)?)?;
     m.add_function(wrap_pyfunction!(default_device_path, m)?)?;
+    let device_mod = PyModule::new(py, "device")?;
+    device::device(py, device_mod)?;
+    m.add_submodule(device_mod)?;
     py.import("sys")?.getattr("modules")?.set_item(
         "aws_nitro_enclaves.nsm._rust",
         m,
