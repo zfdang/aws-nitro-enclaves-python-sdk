@@ -9,6 +9,7 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional, Sequence, cast
 
+from . import _native_typing as _native
 from .errors import (
     NsmAttestationError,
     NsmCertificateError,
@@ -20,20 +21,10 @@ from .errors import (
     NsmSessionClosedError,
 )
 
-_native: Any = None
+# expose typed helpers locally
+ffi = _native.ffi
+lib = _native.lib
 _NATIVE_IMPORT_ERROR: Optional[ImportError] = None
-ffi: Any = None
-lib: Any = None
-
-try:  # pragma: no cover - exercised indirectly in tests
-    from . import _native
-except ImportError as exc:  # pragma: no cover - handled in tests via monkeypatch
-    _native = None
-    _NATIVE_IMPORT_ERROR = exc
-else:
-    _NATIVE_IMPORT_ERROR = None
-    ffi = _native.ffi
-    lib = _native.lib
 
 
 DEFAULT_DEVICE_PATH = "/dev/nsm"
@@ -93,7 +84,7 @@ def _raise_error(
     raise NsmError(message)
 
 
-class NsmTransport(AbstractContextManager["NsmTransport"]):
+class NsmTransport(AbstractContextManager):
     """Context manager around the native NSM session."""
 
     def __init__(self, device_path: Optional[str] = None) -> None:
@@ -136,7 +127,7 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
         buffer = ffi.new("unsigned char[]", length)
         code = lib.nsm_get_random(self._session, buffer, length)
         _raise_error(code, context="random")
-        return cast(bytes, bytes(ffi.buffer(buffer, length)))
+        return _native.buf_to_bytes(buffer, length)
 
     def describe_pcr_raw(self, slot: int) -> Dict[str, Any]:
         buffer = ffi.new("unsigned char[]", PCR_DIGEST_LEN)
@@ -145,7 +136,7 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
         locked = self._slot_locked(slot)
         return {
             "index": slot,
-            "digest": cast(bytes, bytes(ffi.buffer(buffer, PCR_DIGEST_LEN))),
+            "digest": _native.buf_to_bytes(buffer, PCR_DIGEST_LEN),
             "locked": locked,
         }
 
@@ -157,7 +148,7 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
         buffer = ffi.new("unsigned char[]", PCR_DIGEST_LEN)
         code = lib.nsm_extend_pcr(self._session, slot, data, len(data), buffer)
         _raise_error(code, context="pcr", slot=slot)
-        return cast(bytes, bytes(ffi.buffer(buffer, PCR_DIGEST_LEN)))
+        return _native.buf_to_bytes(buffer, PCR_DIGEST_LEN)
 
     def lock_pcr(self, slot: int) -> bool:
         code = lib.nsm_lock_pcr(self._session, slot)
@@ -184,7 +175,7 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
         out_len = ffi.new("size_t *")
         code = lib.nsm_describe_certificate(self._session, slot, out_ptr, out_len)
         _raise_error(code, context="certificate", slot=slot)
-        data = cast(bytes, bytes(ffi.buffer(out_ptr[0], out_len[0])))
+        data = _native.buf_to_bytes(out_ptr[0], out_len[0])
         self._certificates[slot] = True
         return data
 
@@ -255,13 +246,13 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
         pointer = lib.nsm_module_id(self._session)
         if pointer == ffi.NULL:
             raise NsmError("NSM session returned an empty module ID")
-        return cast(str, cast(bytes, ffi.string(pointer)).decode("ascii"))
+        return _native.ptr_to_str(pointer)
 
     def _locked_flags(self) -> Sequence[int]:
         buffer = ffi.new("unsigned char[]", PCR_SLOTS)
         code = lib.nsm_locked_flags(self._session, buffer, PCR_SLOTS)
         _raise_error(code, context="pcr")
-        return list(cast(bytes, bytes(ffi.buffer(buffer, PCR_SLOTS))))
+        return list(_native.buf_to_bytes(buffer, PCR_SLOTS))
 
     def _slot_locked(self, slot: int) -> bool:
         flags = self._locked_flags()
@@ -275,7 +266,7 @@ class NsmTransport(AbstractContextManager["NsmTransport"]):
             out_len = ffi.new("size_t *")
             code = lib.nsm_describe_certificate(self._session, slot, out_ptr, out_len)
             if code == lib.NSM_OK:
-                return cast(bytes, bytes(ffi.buffer(out_ptr[0], out_len[0])))
+                return _native.buf_to_bytes(out_ptr[0], out_len[0])
             if code == lib.NSM_ERR_CERT_MISSING:
                 continue
             _raise_error(code, context="certificate", slot=slot)
