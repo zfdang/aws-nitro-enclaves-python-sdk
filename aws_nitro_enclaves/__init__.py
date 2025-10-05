@@ -1,7 +1,8 @@
 """AWS Nitro Enclaves Python SDK."""
 
-from . import nsm  # noqa: F401
 from importlib import metadata
+
+from . import nsm  # noqa: F401
 
 try:
     __version__ = metadata.version("aws-nitro-enclaves-python-sdk")

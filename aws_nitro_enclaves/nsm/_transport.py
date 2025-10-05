@@ -5,10 +5,9 @@ from __future__ import annotations
 import hashlib
 import time
 from contextlib import AbstractContextManager
+from importlib import metadata
 from pathlib import Path
 from typing import Dict, Iterable, Optional, Sequence
-
-from importlib import metadata
 
 from .errors import (
     NsmAttestationError,
