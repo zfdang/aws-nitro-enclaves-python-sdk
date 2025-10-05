@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+from typing import Callable, Optional, cast
 
 from . import _transport
 from .errors import NsmError, NsmRandomError
@@ -63,7 +63,7 @@ class NsmClient:
             raise NsmError("PCR slot must be non-negative")
         transport = self._require_transport()
         raw = transport.describe_pcr_raw(slot)
-        digest = bytes(raw["digest"])
+        digest = cast(bytes, raw["digest"])
         locked = bool(raw.get("locked", False))
         return PcrValue(slot=slot, digest=digest, locked=locked)
 
