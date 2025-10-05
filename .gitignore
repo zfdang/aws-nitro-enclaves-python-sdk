@@ -86,4 +86,5 @@ __pypackages__/
 !LICENSE
 
 # Prevent inclusion of compiled enclave image files
-*.eifdemo.eif
+*.eif
+demo.eif

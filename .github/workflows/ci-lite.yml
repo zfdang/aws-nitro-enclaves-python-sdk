@@ -24,26 +24,25 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Prepare virtualenv and install test deps
+      - name: Install test deps
         run: |
           python -m pip install --upgrade pip
-          python -m venv .venv
-          source .venv/bin/activate
           pip install pytest
 
       - name: Install package (editable)
         run: |
-          source .venv/bin/activate
           pip install -e .[dev]
 
-      - name: Run tests
+      - name: Prebuild CFFI native extension
         run: |
-          source .venv/bin/activate
-          pytest -q
+          python -m aws_nitro_enclaves.nsm._cffi_build
+
+      - name: Run tests
+        run: pytest -q
 
   lint:
     runs-on: ubuntu-latest
@@ -51,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
