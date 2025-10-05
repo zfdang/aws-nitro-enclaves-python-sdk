@@ -1,12 +1,14 @@
 from setuptools import setup
 
-# Ensure compiled cffi extension modules and any .so files are included in
-# the built wheel. setuptools will include package data listed here.
+# Ensure compiled cffi extension modules build, and exclude C sources from the wheel.
 setup(
 	cffi_modules=["aws_nitro_enclaves/nsm/_cffi_build.py:ffibuilder"],
-	include_package_data=True,
+	include_package_data=False,
 	package_data={
-		# include any compiled shared objects under the package
-		"aws_nitro_enclaves": ["**/*.so", "**/*.abi3.so"],
+		"aws_nitro_enclaves.nsm": ["_native.abi3.so"],
+	},
+	exclude_package_data={
+		"aws_nitro_enclaves": ["**/*.c", "**/*.h", "**/*.pyc"],
+		"aws_nitro_enclaves.nsm": ["*.c", "*.h", "*_native.cpython-*.so"],
 	},
 )

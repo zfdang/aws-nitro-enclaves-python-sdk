@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aws-nitro-enclaves-python-sdk"
-version = "0.1.0"
+version = "1.0.0"
 description = "Python SDK for AWS Nitro Enclaves NSM"
-authors = [{ name = "AWS Nitro Enclaves SDK Team", email = "nitro-enclaves@example.com" }]
+authors = [{ name = "Zhengfa Dang", email = "dantifer@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text = "Apache-2.0" }
+license = { text = "MIT" }
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
@@ -20,7 +20,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: Apache Software License",
+  "License :: OSI Approved :: MIT License",
   "Topic :: Security :: Cryptography",
   "Topic :: Software Development :: Libraries :: Python Modules"
 ]
@@ -43,13 +43,19 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-org/aws-nitro-enclaves-python-sdk"
-Documentation = "https://github.com/your-org/aws-nitro-enclaves-python-sdk/tree/main/docs"
-"Source Code" = "https://github.com/your-org/aws-nitro-enclaves-python-sdk"
-"Issue Tracker" = "https://github.com/your-org/aws-nitro-enclaves-python-sdk/issues"
+Homepage = "https://github.com/zfdang/aws-nitro-enclaves-python-sdk"
+Documentation = "https://github.com/zfdang/aws-nitro-enclaves-python-sdk/tree/main/docs"
+"Source Code" = "https://github.com/zfdang/aws-nitro-enclaves-python-sdk"
+"Issue Tracker" = "https://github.com/zfdang/aws-nitro-enclaves-python-sdk/issues"
 
 [tool.setuptools]
-packages = { find = { where = ["."] } }
+# Only package our Python packages; exclude build artifacts and examples/tests from wheels.
+packages = { find = { where = ["."], exclude = [
+  "build*", "dist*", ".venv*", "examples*", "tests*", "docs*", ".git*", ".*"
+] } }
+# Do not include package data from MANIFEST.in in wheels; we want to ship only Python
+# modules and compiled extensions. MANIFEST.in still applies to sdist.
+include-package-data = false
 
 
 [tool.ruff]

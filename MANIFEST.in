@@ -1,0 +1,13 @@
+# Include license and readme
+include LICENSE
+include README.md
+
+# Include the C shim and generated C in sdist (source distribution only)
+include aws_nitro_enclaves/nsm/_shim.c
+include aws_nitro_enclaves/nsm/_native.c
+
+# Optionally include prebuilt abi3 shared libs if present in sdist (harmless if none)
+recursive-include aws_nitro_enclaves *.abi3.so
+
+# Exclude interpreter-specific shared objects from sdist to avoid platform-specific artifacts
+global-exclude *.cpython-*.so

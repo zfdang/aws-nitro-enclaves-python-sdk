@@ -4,6 +4,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.o
 
 # Distribution / packaging
 .Python
@@ -85,4 +86,4 @@ __pypackages__/
 !LICENSE
 
 # Prevent inclusion of compiled enclave image files
-*.eif
+*.eifdemo.eif

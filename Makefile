@@ -4,7 +4,7 @@ ENCLAVE_ID :=
 MEMORY := 1024
 VCPU := 2
 
-.PHONY: help demo-build demo-eif demo-run demo-console
+.PHONY: help demo-build demo-eif demo-run demo-console verify
 
 help:
 	@echo "Makefile targets:"
@@ -12,6 +12,7 @@ help:
 	@echo "  make demo-eif     # build an EIF from the demo image using nitro-cli"
 	@echo "  make demo-run     # run the EIF in debug mode (prints nitro-cli command)"
 	@echo "  make demo-console # attach to the enclave console (requires ENCLAVE_ID env)"
+	@echo "  make verify       # build extension, build wheel, verify wheel contents, run tests"
 
 # demo-build will produce a wheel that already contains the compiled CFFI .so
 # so the Docker image can install the wheel without compiling inside the image.
@@ -72,7 +73,26 @@ install-wheel: build-wheel | $(VENV)
 	$(PIP) install dist/*.whl[dev]
 
 test: | $(VENV)
+	$(PIP) install -q pytest
 	$(PYTHON) -m pytest -q
 
 clean:
 	rm -rf $(VENV) build dist examples/wheelhouse *.egg-info aws_nitro_enclaves_python_sdk.egg-info
+
+# Verify: reuse existing steps — build the compiled wheel, validate wheel contents,
+# ensure native import works, then run the test target.
+verify: build-wheel-compiled
+	@if [ -z "$$(ls -1 dist/*.whl 2>/dev/null)" ]; then echo "No wheel produced"; exit 1; fi
+	@set -eu; \
+	W=$$(ls -t dist/*.whl | head -n1); \
+	echo "Verifying wheel: $$W"; \
+	so_count=$$(unzip -l "$$W" | grep -c 'aws_nitro_enclaves/nsm/_native.*\.so'); \
+	if [ "$$so_count" -ne 1 ]; then echo "ERROR: expected exactly one _native .so, found $$so_count"; exit 1; fi; \
+	if unzip -l "$$W" | grep -E 'aws_nitro_enclaves/nsm/.*\.(c|h)$$' >/dev/null; then echo "ERROR: C sources present in wheel"; exit 1; fi; \
+	echo "Wheel contents OK";
+	# Install the wheel into the venv to validate import from installed dist
+	$(PIP) install -U $$(ls -t dist/*.whl | head -n1)
+	# Import native module to ensure it loads
+	PY=$$(readlink -f $(PYTHON)); cd /tmp && $$PY -c "import importlib; m=importlib.import_module('aws_nitro_enclaves.nsm._native'); print('Imported from wheel:', m); assert hasattr(m,'ffi') and hasattr(m,'lib'); print('ffi/lib OK')"
+	# Run tests via existing target
+	$(MAKE) test
