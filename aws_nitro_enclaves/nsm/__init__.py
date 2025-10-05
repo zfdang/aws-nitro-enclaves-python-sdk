@@ -4,8 +4,8 @@ from importlib import metadata
 
 from .client import NsmClient
 from .errors import (
-    NsmError,
     NsmDeviceNotFoundError,
+    NsmError,
     NsmPcrLockedError,
     NsmSessionClosedError,
 )
