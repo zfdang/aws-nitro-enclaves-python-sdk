@@ -18,13 +18,6 @@ wheelhouse/
 # Editable install state
 *.egg-link
 
-# Maturin / Rust / target
-target/
-**/target/
-Cargo.lock
-
-# Maturin intermediate
-.maturin/
 
 # pytest
 .pytest_cache/

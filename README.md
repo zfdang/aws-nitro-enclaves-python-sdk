@@ -10,7 +10,7 @@ A lightweight, secure Python interface for the Nitro Secure Module (NSM) inside 
 
 - Provide a stable, high-level `NsmClient` for enclave applications.
 - Offer rich error handling and data models for attestation, PCRs, and certificates.
-- Ship pre-built wheels powered by a Rust extension for performance and safety.
+ - Ship pre-built wheels powered by a tiny native shim surfaced through CFFI (see `aws_nitro_enclaves/nsm/_cffi_build.py`).
 - Include host-side attestation verification helpers.
 
 ## Current capabilities
@@ -36,7 +36,7 @@ pip install .
 ## Project layout
 
 - `aws_nitro_enclaves/` – Python package with client, transport, and type definitions.
-- `src/` – Rust crate exposing the low-level NSM bindings via PyO3.
+- `aws_nitro_enclaves/nsm/_cffi_build.py` – CFFI builder containing the native shim used at runtime.
 - `tests/` – Python test suite.
 - `docs/` – Project documentation (MkDocs).
 

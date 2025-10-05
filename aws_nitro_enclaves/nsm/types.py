@@ -20,7 +20,7 @@ class AttestationDocument:
     """Placeholder for the attestation document structure.
 
     The concrete parsing logic will be implemented in a subsequent iteration once the
-    Rust bindings expose real NSM attestation responses.
+    native bindings expose real NSM attestation responses.
     """
 
     module_id: str

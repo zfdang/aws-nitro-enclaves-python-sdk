@@ -52,8 +52,16 @@ def test_missing_device_path_raises(tmp_path: Path) -> None:
         client.open()
 
 
-def test_rust_sdk_version_matches_package() -> None:
-    version = NsmClient.rust_sdk_version()
+def test_package_sdk_version_alias() -> None:
+    from aws_nitro_enclaves.nsm import sdk_version
+
+    version = sdk_version()
+    assert isinstance(version, str)
+    assert version
+
+
+def test_sdk_version_matches_package() -> None:
+    version = NsmClient.sdk_version()
     assert isinstance(version, str)
     assert version
 

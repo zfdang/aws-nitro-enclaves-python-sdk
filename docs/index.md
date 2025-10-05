@@ -4,6 +4,6 @@ Welcome! This documentation site will cover usage guides, API references, and de
 
 ## Roadmap
 
-- Alpha: establish Rust bindings, Python client, and attestation helpers.
+ - Alpha: establish CFFI-backed native shim, Python client, and attestation helpers.
 - Beta: integrate with real NSM device workflows and add verification policies.
 - GA: stability hardening, performance tuning, and extended platform support.

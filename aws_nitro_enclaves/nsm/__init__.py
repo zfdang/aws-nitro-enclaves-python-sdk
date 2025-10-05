@@ -10,10 +10,17 @@ try:
 except metadata.PackageNotFoundError:  # pragma: no cover - local dev
     __version__ = "0.0.0"
 
+def sdk_version() -> str:
+    """Return the version of the bundled native extension."""
+
+    return NsmClient.sdk_version()
+
+
 __all__ = [
     "NsmClient",
     "NsmError",
     "NsmDeviceNotFoundError",
     "NsmSessionClosedError",
     "NsmPcrLockedError",
+    "sdk_version",
 ]

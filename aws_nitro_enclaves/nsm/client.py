@@ -12,7 +12,7 @@ TransportFactory = Callable[[Optional[str]], _transport.NsmTransport]
 
 
 class NsmClient:
-    """Blocking NSM client backed by the Rust transport."""
+    """Blocking NSM client backed by the native CFFI transport."""
 
     def __init__(
         self,
@@ -156,7 +156,7 @@ class NsmClient:
         return self._transport
 
     @staticmethod
-    def rust_sdk_version() -> str:
-        """Expose the compiled Rust extension version."""
+    def sdk_version() -> str:
+        """Public alias for the native extension version."""
 
         return _transport.sdk_version()

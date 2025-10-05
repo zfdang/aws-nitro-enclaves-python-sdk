@@ -4,15 +4,15 @@ Thank you for taking the time to improve the AWS Nitro Enclaves Python SDK!
 
 ## Development environment
 
-1. Install Python 3.8 or newer.
-2. Install Rust (stable toolchain) and [maturin](https://github.com/PyO3/maturin).
-3. Create a virtual environment and install development dependencies:
+1. Install Python 3.8 or newer (and a working C toolchain for building the CFFI module).
+2. Create a virtual environment and install development dependencies:
    ```bash
+   python -m venv .venv
+   source .venv/bin/activate
    pip install -e .[dev]
    ```
-4. Run the test suite:
+3. Run the test suite:
    ```bash
-   maturin develop
    pytest
    ```
 
