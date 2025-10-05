@@ -32,7 +32,7 @@ else:
     lib = _native.lib
 
 
-DEFAULT_DEVICE_PATH = "/var/run/nsm"
+DEFAULT_DEVICE_PATH = "/dev/nsm"
 PCR_SLOTS = 32
 PCR_DIGEST_LEN = 32
 CERTIFICATE_SLOTS = 4
