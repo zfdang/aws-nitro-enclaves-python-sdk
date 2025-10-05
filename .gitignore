@@ -83,3 +83,6 @@ __pypackages__/
 # Ensure README, license, and other metadata tracked explicitly
 !README.md
 !LICENSE
+
+# Prevent inclusion of compiled enclave image files
+*.eif
