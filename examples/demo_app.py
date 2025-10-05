@@ -12,8 +12,8 @@ import json
 import logging
 import sys
 import time
-from aws_nitro_enclaves.nsm.client import NsmClient
 
+from aws_nitro_enclaves.nsm.client import NsmClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 logger = logging.getLogger("demo_app")

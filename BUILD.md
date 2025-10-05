@@ -210,6 +210,9 @@ grep -i huge /proc/meminfo
 # list current enclaves
 sudo nitro-cli describe-enclaves
 
+# attach to an enclave console (if running in debug mode)
+sudo nitro-cli console --enclave-id <id>
+
 # terminate an enclave
 sudo nitro-cli terminate-enclave --enclave-id <id>
 
